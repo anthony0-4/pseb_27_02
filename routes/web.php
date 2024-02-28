@@ -13,3 +13,7 @@ Route::get('/aluno', [AlunoController::class,"index"]);
 Route::get('/aluno/create', [AlunoController::class,"create"]);
 //recebe os dados do formulario para ser salvo na função store
 Route::post('/aluno', [AlunoController::class,"store"])->name('aluno.store');
+//rota para excluir os dados
+Route::get('/aluno/destroy/{id}', [AlunoController::class,"destroy"])->name('aluno.destroy');
+
+Route::post('/aluno/search', [AlunoController::class,"search"])->name('aluno.search');

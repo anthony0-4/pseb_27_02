@@ -12,7 +12,11 @@ class AlunoController extends Controller
      */
     public function index()
     {
-        return view("aluno.list");
+        $dados = Aluno::all();
+
+        //dd($dados);
+
+        return view("aluno.list", ["dados"=>$dados]);
     }
 
     /**
@@ -64,8 +68,30 @@ class AlunoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $dado = Aluno::findOrFail($id);
+
+        $dado->delete();
+
+        return redirect('aluno');
+    }
+
+    public function search(Request $request)
+    {
+        if(!empty($request->nome)){
+            $dados = Aluno::where(
+                "nome",
+                "like",
+                "%".$request->nome."%"
+            )->get();
+        }else{
+            $dados = Aluno::all();
+        }
+        $dados = Aluno::all();
+
+        //dd($dados);
+
+        return view("aluno.list", ["dados"=>$dados]);
     }
 }
