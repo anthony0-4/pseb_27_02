@@ -32,6 +32,18 @@ class AlunoController extends Controller
      */
     public function store(Request $request)
     {
+
+        $request->validate([
+            'nome'=>"required|max:100",
+            'cpf'=>"required|max:16",
+            'telefone'=>"nullable"
+        ],[
+            'nome.required' => "O :attribute é obrigatório",
+            'nome.max' =>"Só é permetido 100 caracteres",
+            'cpf.required' => "O :attribute é obrigatório",
+            'cpf.max' =>"Só é permetido 16 caracteres",
+        ]);
+
         Aluno::create(
             [
                 'nome'=> $request->nome,
@@ -54,7 +66,9 @@ class AlunoController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $dado = Aluno::findOFind($id);
+
+        return view("aluno.form",['dado'=>$dado]);
     }
 
     /**
@@ -62,7 +76,25 @@ class AlunoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'nome'=>"required|max:100",
+            'cpf'=>"required|max:16",
+            'telefone'=>"nullable"
+        ],[
+            'nome.required' => "O :attribute é obrigatório",
+            'nome.max' =>"Só é permetido 100 caracteres",
+            'cpf.required' => "O :attribute é obrigatório",
+            'cpf.max' =>"Só é permetido 16 caracteres",
+        ]);
+
+        Aluno::updateOrCreate(
+            ['id'=>$request->id],
+            [
+                'nome'=> $request->nome,
+                'telefone'=> $request->telefone,
+                'cpf' => $request->cpf,
+            ]
+        );
     }
 
     /**

@@ -33,6 +33,12 @@
                 <td>{{$item->cpf}}</td>
                 <td>Work room</td>
                 <td><a href="{{route('aluno.destroy', $item->id)}}">You're not that kind of girl</a></td>
+                <td><form action="{{ route('aluno.destroy', $item)}}" method="post">
+                    @method("DELETE")
+                    @csrf
+                    <input type="submit" value="You're not that kind of girl">
+                    </form>
+                </td>
             </tr>
         @endforeach
     </tbody>

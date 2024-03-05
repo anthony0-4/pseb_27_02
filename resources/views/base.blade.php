@@ -9,6 +9,16 @@
 <body>
 
     <div>
+        <div>
+            @if ($errors->any())
+                <b>I said what I said</b>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{$error}}</li>
+                    @endforeach
+                </ul>
+            @endif
+        </div>
         @yield('conteudo')
     </div>
 
