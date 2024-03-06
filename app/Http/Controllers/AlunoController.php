@@ -51,6 +51,8 @@ class AlunoController extends Controller
                 'cpf' => $request->cpf,
             ]
         );
+
+        return redirect('aluno');
     }
 
     /**
@@ -66,7 +68,7 @@ class AlunoController extends Controller
      */
     public function edit(string $id)
     {
-        $dado = Aluno::findOFind($id);
+        $dado = Aluno::findOrFail($id);
 
         return view("aluno.form",['dado'=>$dado]);
     }
@@ -95,6 +97,8 @@ class AlunoController extends Controller
                 'cpf' => $request->cpf,
             ]
         );
+
+        return redirect('aluno');
     }
 
     /**
