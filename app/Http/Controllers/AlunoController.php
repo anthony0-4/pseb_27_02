@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Aluno;
 use Illuminate\Http\Request;
+use App\Models\Categoria;
 
 class AlunoController extends Controller
 {
@@ -24,7 +25,8 @@ class AlunoController extends Controller
      */
     public function create()
     {
-        return view("aluno.form");
+        $categorias = Categoria::all();
+        return view("aluno.form",['categorias'=>$categorias]);
     }
 
     /**
@@ -36,11 +38,13 @@ class AlunoController extends Controller
         $request->validate([
             'nome'=>"required|max:100",
             'cpf'=>"required|max:16",
+            'categoria_id'=>"required",
             'telefone'=>"nullable"
         ],[
             'nome.required' => "O :attribute é obrigatório",
             'nome.max' =>"Só é permetido 100 caracteres",
             'cpf.required' => "O :attribute é obrigatório",
+            'categoria_id.required'=>"O :attribute é obrigatório",
             'cpf.max' =>"Só é permetido 16 caracteres",
         ]);
 
@@ -68,9 +72,14 @@ class AlunoController extends Controller
      */
     public function edit(string $id)
     {
+        $categorias = Categorias::all();
+
         $dado = Aluno::findOrFail($id);
 
-        return view("aluno.form",['dado'=>$dado]);
+        return view("aluno.form",[
+            'dado'=>$dado,
+            'categorias'=>$categorias
+    ]);
     }
 
     /**
@@ -81,11 +90,13 @@ class AlunoController extends Controller
         $request->validate([
             'nome'=>"required|max:100",
             'cpf'=>"required|max:16",
+            'categoria_id'=>"required",
             'telefone'=>"nullable"
         ],[
             'nome.required' => "O :attribute é obrigatório",
             'nome.max' =>"Só é permetido 100 caracteres",
             'cpf.required' => "O :attribute é obrigatório",
+            'categoria_id.required'=>"O :attribute é obrigatório",
             'cpf.max' =>"Só é permetido 16 caracteres",
         ]);
 
