@@ -16,8 +16,15 @@ class Aluno extends Model
         "telefone",
         "cpf",
         "categoria_id",
+        "imagem",
     ];
-    protected $cast = [
-        'categora_id'=>'integer'
+
+    protected $casts = [
+        'categoria_id'=>'integer'
     ];
+
+    public function categoria(){
+
+        return $this->belongsTo(Categoria::class, 'categoria_id');
+    }
 }

@@ -3,21 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aluno;
-use Illuminate\Http\Request;
 use App\Models\Categoria;
+use Illuminate\Http\Request;
 
 class AlunoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
+        //app/http/Controller
         $dados = Aluno::all();
 
-        //dd($dados);
+        // dd($dados);
 
-        return view("aluno.list", ["dados"=>$dados]);
+        return view("aluno.list", ["dados" => $dados]);
     }
 
     /**
@@ -26,6 +24,7 @@ class AlunoController extends Controller
     public function create()
     {
         $categorias = Categoria::all();
+
         return view("aluno.form",['categorias'=>$categorias]);
     }
 
@@ -34,28 +33,41 @@ class AlunoController extends Controller
      */
     public function store(Request $request)
     {
+        //app/http/Controller
 
         $request->validate([
-            'nome'=>"required|max:100",
-            'cpf'=>"required|max:16",
-            'categoria_id'=>"required",
-            'telefone'=>"nullable"
-        ],[
+            'nome' => "required|max:100",
+            'cpf' => "required|max:16",
+            'categoria_id' => "required",
+            'telefone' => "nullable",
+           // 'imagem' => "nullable|image|mimes:png,jpeg,jpg"
+        ], [
             'nome.required' => "O :attribute é obrigatório",
-            'nome.max' =>"Só é permetido 100 caracteres",
+            'nome.max' => "Só é permitido 100 caracteres",
             'cpf.required' => "O :attribute é obrigatório",
-            'categoria_id.required'=>"O :attribute é obrigatório",
-            'cpf.max' =>"Só é permetido 16 caracteres",
+            'cpf.max' => "Só é permitido 16 caracteres",
+            'categoria_id.required' => "O :attribute é obrigatório",
+           // 'imagem.image' => "Deve ser enviado uma imagem",
+          //  'imagem.mimes' => "A imagem deve ser deve ser .png/.jpeg/.jpg",
         ]);
 
-        Aluno::create(
-            [
-                'nome'=> $request->nome,
-                'telefone'=> $request->telefone,
-                'cpf' => $request->cpf,
-            ]
-        );
 
+        $data = $request->all();
+
+        $imagem = $request->file('imagem');
+
+        if($imagem){
+            $nome_arquivo = date('YmdHis'). "." .$imagem->getClientOriginalExtension();
+            $diretorio = "imagem/aluno/";
+
+            $imagem->storeAs($diretorio, $nome_arquivo, 'public');
+
+            $data['imagem'] = $diretorio . $nome_arquivo;
+
+        }
+
+
+        Aluno::create($data);
         return redirect('aluno');
     }
 
@@ -72,14 +84,14 @@ class AlunoController extends Controller
      */
     public function edit(string $id)
     {
-        $categorias = Categorias::all();
-
         $dado = Aluno::findOrFail($id);
 
-        return view("aluno.form",[
-            'dado'=>$dado,
-            'categorias'=>$categorias
-    ]);
+        $categorias = Categoria::all();
+
+        return view("aluno.form", [
+            'dado' => $dado,
+            'categorias'=> $categorias
+        ]);
     }
 
     /**
@@ -87,26 +99,42 @@ class AlunoController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        //app/http/Controller
+
         $request->validate([
-            'nome'=>"required|max:100",
-            'cpf'=>"required|max:16",
-            'categoria_id'=>"required",
-            'telefone'=>"nullable"
-        ],[
+            'nome' => "required|max:100",
+            'cpf' => "required|max:16",
+            'categoria_id' => "required",
+            'telefone' => "nullable",
+            'imagem' => "nullable|image|mimes:png,jpeg,jpg"
+        ], [
             'nome.required' => "O :attribute é obrigatório",
-            'nome.max' =>"Só é permetido 100 caracteres",
+            'nome.max' => "Só é permitido 100 caracteres",
             'cpf.required' => "O :attribute é obrigatório",
-            'categoria_id.required'=>"O :attribute é obrigatório",
-            'cpf.max' =>"Só é permetido 16 caracteres",
+            'cpf.max' => "Só é permitido 16 caracteres",
+            'categoria_id.required' => "O :attribute é obrigatório",
+            'imagem.image' => "Deve ser enviado uma imagem",
+            'imagem.mimes' => "A imagem deve ser deve ser .png/.jpeg/.jpg",
         ]);
 
+
+        $data = $request->all();
+
+        $imagem = $request->file('imagem');
+
+        if($imagem){
+            $nome_arquivo = date('YmdHis'). "." .$imagem->getClientOriginalExtension();
+            $diretorio = "imagem/aluno/";
+
+            $imagem->storeAs($diretorio, $nome_arquivo, 'public');
+
+            $data['imagem'] = $diretorio . $nome_arquivo;
+
+        }
+
         Aluno::updateOrCreate(
-            ['id'=>$request->id],
-            [
-                'nome'=> $request->nome,
-                'telefone'=> $request->telefone,
-                'cpf' => $request->cpf,
-            ]
+            ['id' => $request->id],
+            $data
         );
 
         return redirect('aluno');
@@ -118,7 +146,7 @@ class AlunoController extends Controller
     public function destroy($id)
     {
         $dado = Aluno::findOrFail($id);
-
+        // dd($dado);
         $dado->delete();
 
         return redirect('aluno');
@@ -126,19 +154,17 @@ class AlunoController extends Controller
 
     public function search(Request $request)
     {
-        if(!empty($request->nome)){
+        if (!empty($request->nome)) {
             $dados = Aluno::where(
                 "nome",
                 "like",
-                "%".$request->nome."%"
+                "%" . $request->nome . "%"
             )->get();
-        }else{
+        } else {
             $dados = Aluno::all();
         }
-        $dados = Aluno::all();
+        // dd($dados);
 
-        //dd($dados);
-
-        return view("aluno.list", ["dados"=>$dados]);
+        return view("aluno.list", ["dados" => $dados]);
     }
 }

@@ -1,16 +1,16 @@
 @extends('base')
 @section('conteudo')
-@section('titulo', 'Formulário de Aluno')
+@section('titulo', 'Formulário de Professor')
 @php
     if (!empty($dado->id)) {
-        $route = route('aluno.update', $dado->id);
+        $route = route('professor.update', $dado->id);
     } else {
-        $route = route('aluno.store');
+        $route = route('professor.store');
     }
 @endphp
 
-<h3>Formulário de Aluno</h3>
-<form action="{{ $route }}" method="post" enctype="">
+<h3>Formulário de Professor</h3>
+<form action="{{ $route }}" method="post">
 
     @csrf
 
@@ -40,16 +40,8 @@
         @endforeach
     </select><br>
 
-    @php
-        $nome_imagem = !empty($dado->imagem)? $dado->imagem : "sem_imagem.jpg"
-    @endphp
-    <label for="">Imagem</label><br>
-    <img src="/storage/{{$nome_imagem}}" width="300px" alt="imagem">
-    <input type="file" name="imagem" class="form-control"
-        value="@if (!empty($dado->imagem)) {{ $dado->imagem }}@elseif (!empty(old('imagem'))){{ old('imagem') }}@else{{ '' }} @endif"><br>
-
     <button type="submit" class="btn btn-success">Salvar</button>
-    <a href="{{ url('aluno') }}" class="btn btn-primary">Voltar</a>
+    <a href="{{ url('professor') }}" class="btn btn-primary">Voltar</a>
 </form>
 
 @stop

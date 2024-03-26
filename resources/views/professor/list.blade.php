@@ -1,10 +1,10 @@
 @extends('base')
 @section('conteudo')
-@section('titulo', 'Listagem de Alunos')
+@section('titulo', 'Listagem de Professores')
 
-<h3>Listagem de Alunos</h3>
+<h3>Listagem de Professores</h3>
 
-<form action="{{ route('aluno.search') }}" method="post">
+<form action="{{ route('professor.search') }}" method="post">
 
     <div class="row">
         @csrf
@@ -14,7 +14,7 @@
         </div>
         <div class="col-4" style="margin-top: 22px;">
             <button type="submit" class="btn btn-primary"> <i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
-            <a href="{{ url('aluno/create') }}" class="btn btn-success"><i class="fa-solid fa-plus"></i> Novo</a>
+            <a href="{{ url('professor/create') }}" class="btn btn-success"><i class="fa-solid fa-plus"></i> Novo</a>
         </div>
     </div>
 </form>
@@ -41,10 +41,10 @@
                 <td>{{ $item->telefone }}</td>
                 <td>{{ $item->cpf }}</td>
                 <td>{{ $item->categoria->nome ?? '' }}</td>
-                <td><a href="{{ route('aluno.edit', $item->id) }} "class="btn btn-outline-primary" title="Editar"><i
+                <td><a href="{{ route('professor.edit', $item->id) }} "class="btn btn-outline-primary" title="Editar"><i
                             class="fa-solid fa-pen-to-square"></i></a></td>
                 <td>
-                    <form action="{{ route('aluno.destroy', $item) }}" method="post">
+                    <form action="{{ route('professor.destroy', $item) }}" method="post">
                         @method('DELETE')
                         @csrf
                         <button type="submit" class="btn btn-outline-danger" title="Deletar"
